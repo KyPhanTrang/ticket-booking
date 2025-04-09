@@ -1,0 +1,112 @@
+.image-container {
+    width: 100%; 
+    height: 300px; /* Đặt chiều cao cố định */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Crop ảnh cho đồng đều */
+}
+
+.grid-list {
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 phần tử mỗi hàng */
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+}
+
+.showtime-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+.showtime-btn {
+    width: 100%; /* Chiếm toàn bộ chiều rộng cột */
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: left;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+.sidebar {
+    height: 950px;
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+}
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+}
+.sidebar a:hover {
+    background-color: #495057;
+}
+.content {
+    padding: 20px;
+}
+
+/* Căn giữa phân trang */
+.pagination {
+    justify-content: center; /* Căn giữa ngang */
+    margin-top: 20px; /* Khoảng cách trên */
+    margin-bottom: 20px; /* Khoảng cách dưới */
+}
+
+/* Tùy chỉnh nút phân trang */
+.page-item {
+    margin: 0 5px; /* Khoảng cách giữa các nút */
+}
+
+.page-link {
+    background-color: #343a40; /* Màu nền tối (phù hợp table-dark) */
+    color: #ffffff; /* Màu chữ trắng */
+    border: 1px solid #ffffff; /* Viền trắng */
+    border-radius: 5px; /* Bo góc */
+    padding: 8px 12px; /* Kích thước padding */
+}
+
+/* Nút active */
+.page-item.active .page-link {
+    background-color: #007bff; /* Màu xanh khi active */
+    border-color: #007bff;
+    color: #ffffff;
+}
+
+/* Hover hiệu ứng */
+.page-link:hover {
+    background-color: #495057; /* Màu nền khi hover */
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Nút Previous/Next */
+.page-item:first-child .page-link,
+.page-item:last-child .page-link {
+    background-color: #6c757d; /* Màu xám cho Previous/Next */
+}
+
+.custom-list {
+    column-count: 10; /* Số cột */
+    column-gap: 10px;
+    max-height: 350px; /* Giả sử mỗi li cao 40px, 7 item = 280px */
+     /* Ẩn các item thừa nếu cần */
+    overflow: hidden;
+}
+
+.custom-list .nav-item {
+    break-inside: avoid; /* Ngăn không cho item bị chia cắt giữa các cột */
+}
