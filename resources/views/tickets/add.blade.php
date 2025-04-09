@@ -66,16 +66,16 @@
                     <input type="hidden" name="seat_id" id="seat_id">
 
                     <div class="form-group">
-                        <label for="name">Họ và Tên:</label>
-                        <input type="text" name="customer_name" class="form-control" required>
+                        <label for="customer_name">Họ và Tên:</label>
+                        <input type="text" name="customer_name" class="form-control" id="customer_name"required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" name="customer_email" class="form-control" required>
+                        <label for="customer_email">Email:</label>
+                        <input type="email" name="customer_email" class="form-control" id="customer_email" required>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Số điện thoại:</label>
-                        <input type="text" name="customer_phone" class="form-control" required>
+                        <label for="customer_phone">Số điện thoại:</label>
+                        <input type="text" name="customer_phone" class="form-control" id="customer_phone" required>
                     </div>
                     <input type="hidden" name="booking_date" value="{{ now()->format('Y-m-d H:i:s') }}">
 

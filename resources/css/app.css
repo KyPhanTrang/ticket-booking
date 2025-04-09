@@ -110,3 +110,8 @@ body {
 .custom-list .nav-item {
     break-inside: avoid; /* Ngăn không cho item bị chia cắt giữa các cột */
 }
+
+.btn:disabled {
+    opacity: 0.6; /* Làm mờ nút để dễ nhận biết */
+    cursor: not-allowed; /* Con trỏ chuột thay đổi */
+}

@@ -2,6 +2,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    let tickets_booked = [];
     $(document).ready(function() {
         $(".showtime-btn").click(function() {
             let showtimeId = $(this).data("showtime");
@@ -14,16 +15,43 @@
             $("#booking-form").hide();
 
             $(".seat-container").html('<p>Đang tải ghế...</p>');
+
+            let tickets_booked; // Khai báo biến
+
             $.ajax({
-                url: "/get-seats/" + hallId,
-                type: "GET",
+                url: '/get-tickets/' + showtimeId,
+                type: 'GET',
                 success: function(data) {
-                    let seatHtml = "";
-                    data.forEach(seat => {
-                        seatHtml +=
-                            `<div class="seat btn btn-outline-primary m-2" data-seat="${seat.id}">${seat.seat_number}</div>`;
+                    tickets_booked = data; // Lưu vé đã đặt
+
+                    // Gọi Ajax 2 sau khi Ajax 1 hoàn tất
+                    $.ajax({
+                        url: "/get-seats/" + hallId,
+                        type: "GET",
+                        success: function(data) {
+                            let seatHtml = "";
+                            data.forEach(seat => {
+                                // Kiểm tra xem ghế có trong tickets_booked không
+                                const isBooked = tickets_booked.some(
+                                    ticket => ticket.seat_id ===
+                                    seat.id);
+                                if (!isBooked) {
+                                    seatHtml +=
+                                        `<div class="seat btn btn-outline-primary m-2" data-seat="${seat.id}">${seat.seat_number}</div>`;
+                                } else {
+                                    seatHtml +=
+                                        `<button class="btn btn-dark m-2" data-seat="${seat.id}" disabled>${seat.seat_number}</button>`;
+                                }
+                            });
+                            $(".seat-container").html(seatHtml);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error fetching seats:", error);
+                        }
                     });
-                    $(".seat-container").html(seatHtml);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching tickets:", error);
                 }
             });
         });
@@ -73,7 +101,9 @@
             // e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
             let location = $(this).data("location");
             $('#cinema-selection').show();
-            $('#cinema-container').html('<li class="nav-item mx-4 my-1"><p class="nav-link provinces-btn">Đang tải rạp ...</p></li>')
+            $('#cinema-container').html(
+                    '<li class="nav-item mx-4 my-1"><p class="nav-link provinces-btn">Đang tải rạp ...</p></li>'
+                )
                 .show(); // Hiển thị container
 
             $.ajax({
@@ -95,7 +125,8 @@
                 },
                 error: function(xhr, status, error) {
                     $('#cinema-container').html(
-                        '<li class="nav-item mx-4 my-1"><p class="nav-link provinces-btn">Lỗi khi tải rạp: ' + error +
+                        '<li class="nav-item mx-4 my-1"><p class="nav-link provinces-btn">Lỗi khi tải rạp: ' +
+                        error +
                         '</p></li>');
                 }
             });

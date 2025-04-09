@@ -12,6 +12,8 @@ use App\Http\Controllers\ShowtimeController;
 use App\Models\Cinema;
 use App\Models\Seat;
 use App\Models\Hall;
+use App\Models\Showtime;
+use App\Models\Ticket;
 
 // Frontend
 Route::get('/', [HomeController::class, 'index'])->name('homes.index');
@@ -44,6 +46,10 @@ Route::get('/ticket/{movie_id}', [TicketController::class, 'create'])->name('tic
 Route::get('/get-seats/{hall_id}', function($hall_id) {
     return Seat::where('hall_id', $hall_id)->get();
 });
+Route::get('/get-tickets/{showtime_id}', function($showtime_id) {
+    return Ticket::where('showtime_id', $showtime_id)->get();
+});
+
 Route::get('/get-cinemas', function() {
     return Cinema::all();
 });
@@ -59,3 +65,4 @@ Route::get('/get-cinemas/{location}', function ($location){
 
 //Home
 Route::get('/home/home_cinemas', [HomeController::class, 'home_cinemas'])->name('homes.home_cinemas');
+
