@@ -24,8 +24,17 @@ Route::get('/admin', [AuthController::class, 'index'])->name('auth.admin');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
+Route::resource('/tickets', TicketController::class)->except(['create', 'store']);
+Route::middleware('admin')->group(function () {
+    Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
+    Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
+    Route::get('/tickets/{ticket}/edit', [TicketController::class, 'edit'])->name('tickets.edit');
+    Route::put('/tickets/{ticket}', [TicketController::class, 'update'])->name('tickets.update');
+    Route::delete('/tickets/{ticket}', [TicketController::class, 'destroy'])->name('tickets.destroy');
+});
+Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
+
 // Resources
-Route::resource('tickets', TicketController::class);
 Route::resource('cinemas', CinemaController::class)->middleware('admin');
 Route::resource('movies', MovieController::class)->middleware('admin');
 Route::resource('showtimes', ShowtimeController::class)->middleware('admin');
