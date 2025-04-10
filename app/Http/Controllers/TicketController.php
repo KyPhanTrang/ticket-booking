@@ -40,19 +40,37 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all()); // In ra tất cả dữ liệu từ form
-        $validated = $request->validate([
+        $request->validate([
             'showtime_id' => 'required|exists:showtimes,id',
-            'seat_id' => 'required|exists:seats,id',
+            'selected_seats' => 'required|string',
             'customer_name' => 'required|string',
             'customer_email' => 'required|email',
-            'customer_phone' => 'required|string',
-            'booking_date' => 'required|date',
+            'customer_phone' => 'required|digits_between:10,11',
+            'booking_date' => 'required|date'
+        ], [
+            'customer_phone.required' => 'Chỉ được nhập số vào trường số điện thoại !',
+            'customer_phone.digits_between' => 'Số điện thoại phải có từ 10 đến 11 chữ số!'
         ]);
 
-        $ticket = new Ticket($validated);
-        $ticket->status = 'booked';
-        $ticket->save();
+        $showtime_id = $request->showtime_id;
+        $customer_name = $request->customer_name;
+        $customer_email = $request->customer_email;
+        $customer_phone = $request->customer_phone;
+        $booking_date = $request->booking_date;
+
+        $selected_seats = explode(',', $request->selected_seats);
+
+        foreach ($selected_seats as $seatId) {
+            Ticket::create([
+                'showtime_id' => $showtime_id,
+                'seat_id' => $seatId,
+                'customer_name' => $customer_name,
+                'customer_email' => $customer_email,
+                'customer_phone' => $customer_phone,
+                'booking_date' => $booking_date
+            ]);
+        }
+
         return redirect()->route('homes.index')->with('success', 'Bạn đã đặt vé thành công !');
     }
 
@@ -95,8 +113,15 @@ class TicketController extends Controller
             'seat_id' => 'required',
             'customer_name' => 'required|max:50',
             'customer_email' => 'required|max:50',
-            'customer_phone' => 'required|max:50',
+            'customer_phone' => 'required|numeric|min:10|max:11',
             'status' => 'required'
+        ], [
+            'customer_phone.required' => 'Chỉ được nhập số vào trường số điện thoại !',
+            'customer_phone.numeric' => 'Phải nhập số!',
+            'customer_phone.min' => 'Tối thiểu 10 số!',
+            'customer_phone.max' => 'Tối đa 11 số!',
+            'customer_name.required' => 'Không được để trống tên',
+            'customer_name.max' => 'Không được quá 50 ký tự',
         ]);
 
         $ticket = Ticket::find($id);

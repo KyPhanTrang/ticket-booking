@@ -2,6 +2,7 @@
 <html lang="vi">
 {{-- @php $title = 'Home' @endphp --}}
 <head>
+    @include('homes.component.notifi-error')
     @include('homes.component.head')
     @include('homes.component.script')
     

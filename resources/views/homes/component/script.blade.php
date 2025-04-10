@@ -1,10 +1,17 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Thêm CDN Toastify -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 <script>
     let tickets_booked = [];
+    let selectedSeats = [];
     $(document).ready(function() {
         $(".showtime-btn").click(function() {
+            $(".showtime-btn").removeClass("active");
+            $(this).addClass("active");
+
             let showtimeId = $(this).data("showtime");
             let hallId = $(this).data("hall");
 
@@ -58,14 +65,23 @@
 
         // Chọn ghế
         $(document).on("click", ".seat", function() {
-            $(".seat").removeClass("btn-primary").addClass("btn-outline-primary");
-            $(this).removeClass("btn-outline-primary").addClass("btn-primary");
-
             let seatId = $(this).data("seat");
-            console.log("Ghế được chọn:", seatId);
-            $("#seat_id").val(seatId);
-            $("#confirm-seats").prop("disabled", false);
-        });
+            const maxSeats = 3; // limit 3
+            if ($(this).hasClass("btn-primary")) {
+                $(this).removeClass("btn-primary").addClass("btn-outline-primary");
+                selectedSeats = selectedSeats.filter(id => id != seatId)
+            } else {
+                if (selectedSeats.length >= 3) {
+                    alert(`Bạn chỉ được chọn tối đa ${maxSeats} ghế!`);
+                    return;
+                } 
+                $(this).removeClass('btn-outline-primary').addClass('btn-primary');
+                selectedSeats.push(seatId);
+            }
+            console.log(selectedSeats);
+            $("#selected_seats").val(selectedSeats.join(","));  // .val(data) === .value = data 
+            $("#confirm-seats").prop("disabled", selectedSeats.length == 0); // prop(propertyName, value)
+        })
 
         // Bấm "Tiếp tục" để mở form
         $("#confirm-seats").click(function() {
@@ -78,11 +94,11 @@
 
         $("form").submit(function(event) {
             let showtimeId = $("#showtime_id").val();
-            let seatId = $("#seat_id").val();
+            let selected_seats = $("#selected_seats").val();
 
-            console.log("Dữ liệu submit - showtime_id:", showtimeId, ", seat_id:", seatId);
+            console.log("Dữ liệu submit - showtime_id:", showtimeId, ", selected_seats:", selected_seats);
 
-            if (!showtimeId || !seatId) {
+            if (!showtimeId || !selected_seats) {
                 event.preventDefault();
                 alert("Vui lòng chọn suất chiếu và ghế trước khi đặt vé!");
             }

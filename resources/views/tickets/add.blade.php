@@ -63,7 +63,7 @@
                 <form action="{{ route('tickets.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="showtime_id" id="showtime_id">
-                    <input type="hidden" name="seat_id" id="seat_id">
+                    <input type="hidden" name="selected_seats" id="selected_seats">
 
                     <div class="form-group">
                         <label for="customer_name">Họ và Tên:</label>
